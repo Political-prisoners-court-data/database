@@ -2,13 +2,11 @@ CREATE USER airtable;
 CREATE SCHEMA AUTHORIZATION airtable;
 
 CREATE USER db;
-CREATE SCHEMA db;
-GRANT USAGE ON SCHEMA db TO db;
-GRANT TRUNCATE, SELECT, INSERT ON ALL TABLES IN SCHEMA db to db;
-
 GRANT USAGE ON SCHEMA scraper TO db;
 GRANT TRUNCATE, SELECT ON ALL TABLES IN SCHEMA scraper TO db;
 
+CREATE SCHEMA db;
+GRANT USAGE ON SCHEMA db TO db;
 
 CREATE TABLE db.rfm_person
 (
@@ -49,3 +47,5 @@ FROM db.rfm_person AS old
 WHERE old.is_terr <> new.is_terr
    OR old.address <> new.address
    OR old.aliases <> new.aliases;
+
+GRANT TRUNCATE, SELECT, INSERT ON ALL TABLES IN SCHEMA db to db;
