@@ -5,6 +5,9 @@ CREATE USER db;
 GRANT USAGE ON SCHEMA scraper TO db;
 GRANT TRUNCATE, SELECT ON ALL TABLES IN SCHEMA scraper TO db;
 
+GRANT USAGE ON SCHEMA airtable TO db;
+GRANT SELECT ON ALL TABLES IN SCHEMA airtable to db;
+
 CREATE SCHEMA db;
 GRANT USAGE ON SCHEMA db TO db;
 
@@ -49,3 +52,38 @@ WHERE old.is_terr <> new.is_terr
    OR old.aliases <> new.aliases;
 
 GRANT TRUNCATE, SELECT, INSERT ON ALL TABLES IN SCHEMA db to db;
+
+CREATE SCHEMA out;
+GRANT USAGE ON SCHEMA out TO db;
+
+-- CREATE TABLE out.rfm_added AS SELECT * FROM db.rfm_added;
+CREATE TABLE out.rfm_added
+(
+    full_name  text,
+    birth_date date,
+    is_terr    boolean
+
+);
+
+-- CREATE TABLE out.rfm_removed AS SELECT * FROM db.rfm_removed;
+create table out.rfm_removed
+(
+    full_name  text,
+    birth_date date,
+    is_terr    boolean
+);
+
+-- CREATE TABLE out.rfm_changed AS SELECT * FROM db.rfm_changed;
+create table out.rfm_changed
+(
+    full_name   text,
+    birth_date  date,
+    old_is_terr boolean,
+    new_is_terr boolean,
+    old_aliases text[],
+    new_aliases text[],
+    old_address text,
+    new_address text
+);
+
+GRANT INSERT ON ALL TABLES IN SCHEMA out TO db;
