@@ -87,3 +87,10 @@ create table out.rfm_changed
 );
 
 GRANT INSERT ON ALL TABLES IN SCHEMA out TO db;
+
+CREATE VIEW out.match_rfm_full_name AS
+SELECT *
+FROM airtable.pzk
+         INNER JOIN db.rfm_person
+                    ON lower(name) = lower(full_name);
+
