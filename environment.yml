@@ -1,0 +1,8 @@
+name: database
+dependencies:
+  - pandas
+  - sqlalchemy
+  - psycopg2
+  - pip
+  - pip:
+      - pyairtable
