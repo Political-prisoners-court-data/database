@@ -23,15 +23,15 @@ CREATE TABLE db.rfm_person
 
 CREATE OR REPLACE VIEW db.rfm_added AS
 SELECT new.full_name, new.birth_date, new.is_terr
-FROM db.rfm_person AS old
-         RIGHT OUTER JOIN scraper.rfm_person AS new
+FROM out.rfm_person AS old
+         RIGHT OUTER JOIN db.rfm_person AS new
                           USING (full_name, birth_date)
 WHERE old.full_name IS NULL;
 
 CREATE OR REPLACE VIEW db.rfm_removed AS
 SELECT old.full_name, old.birth_date, old.is_terr
-FROM db.rfm_person AS old
-         LEFT OUTER JOIN scraper.rfm_person AS new
+FROM out.rfm_person AS old
+         LEFT OUTER JOIN db.rfm_person AS new
                          USING (full_name, birth_date)
 WHERE new.full_name IS NULL;
 
@@ -44,8 +44,8 @@ SELECT old.full_name,
        new.aliases as new_aliases,
        old.address as old_address,
        new.address as new_address
-FROM db.rfm_person AS old
-         INNER JOIN scraper.rfm_person AS new
+FROM out.rfm_person AS old
+         INNER JOIN db.rfm_person AS new
                     USING (full_name, birth_date)
 WHERE old.is_terr <> new.is_terr
    OR old.address <> new.address
@@ -55,6 +55,17 @@ GRANT TRUNCATE, SELECT, INSERT ON ALL TABLES IN SCHEMA db to db;
 
 CREATE SCHEMA out;
 GRANT USAGE ON SCHEMA out TO db;
+
+
+CREATE TABLE out.rfm_person
+(
+    full_name  TEXT,
+    aliases    text[],
+    is_terr    boolean NOT NULL,
+    birth_date date,
+    address    text,
+    PRIMARY KEY (full_name, birth_date)
+);
 
 -- CREATE TABLE out.rfm_added AS SELECT * FROM db.rfm_added;
 CREATE TABLE out.rfm_added

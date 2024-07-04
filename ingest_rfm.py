@@ -8,6 +8,7 @@ with engine.begin() as connection:
     connection.execute(text('INSERT INTO out.rfm_added SELECT * from db.rfm_added'))
     connection.execute(text('INSERT INTO out.rfm_removed SELECT * from db.rfm_removed'))
     connection.execute(text('INSERT INTO out.rfm_changed SELECT * from db.rfm_changed'))
+    connection.execute(text('INSERT INTO out.rfm_person SELECT * from db.rfm_person'))
     connection.execute(text('TRUNCATE TABLE db.rfm_person'))
     connection.execute(text('INSERT INTO db.rfm_person SELECT * from scraper.rfm_person'))
     connection.execute(text('TRUNCATE TABLE scraper.rfm_person'))
